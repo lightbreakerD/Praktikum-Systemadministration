@@ -31,6 +31,8 @@ Nun können wir die Virtualbox Applikation starten, in unserem Terminal
 ## VM Erstellen mithilfe von dem vorgegebenen Template
 Hier gehen wir nun auf den Button "Import" und importieren das VM template für unser Praktikum:
 
+<img src="image.png" width="100">
+
 ![Alt text](image.png)
 
 Das template befindet sich unter 
