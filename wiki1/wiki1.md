@@ -136,8 +136,14 @@ Es sollte so aussehen:
 Nun können wir auf Done und Continue klicken. Die bestehende NTFS partition wird dadurch nicht beschädigt, da wir die 2 neu erstellten Partitionen verwenden werden.
 
 Jetzt können wir unseren User einrichten
+Name ist der angezeigte Name in der gui und mit dem Username loggt man sich im server ein. Für den username habe ich vorerst "boyo" genommen, da wir die user aller Praktikumsmitglieder später alle noch zusammen einpflegen müssen
+Servername entsprechend:
 `vmpsateam10-01 bzw. vmpsateam10-02`
 
+- Ubuntu Pro skippen wir 
+- installieren OpenSSH server
+- Importieren keine SSH Identity
+- Keine Snaps installieren
 
 **ill finish this tmr evening**
 
