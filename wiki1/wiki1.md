@@ -1,7 +1,9 @@
 # Aufgabe 1: Installation eines Betriebssystems
 In dieser Aufgabe gilt es ein Unix-Betriebssystem zu installieren, das für den Rest des Praktikums als Basis für die Bearbeitung aller weiteren Aufgaben dienen soll.
+
 ## Einleitung
 Schreiben wir zuletzt
+
 ## Verbindung mit dem Host Server
 Wir unterscheiden hier zwischen zwei Server, dem Praktikum Server oder der Host Server und die Virtual Machines (VM's). Auf dem Host Server laufen mehrere VM's, die den jeweiligen Praktikum teams gehören.
 
@@ -31,8 +33,6 @@ Nun können wir die Virtualbox Applikation starten, in unserem Terminal
 ## VM Erstellen mithilfe von dem vorgegebenen Template
 Hier gehen wir nun auf den Button "Import" und importieren das VM template für unser Praktikum:
 
-<img src="image.png" width="100">
-
 ![Alt text](image.png)
 
 Das template befindet sich unter 
@@ -43,10 +43,101 @@ Hier wäre es nun wichtig die richtige Mac Adress Policy auszuwählen
 
 ![Alt text](<Screenshot 2024-04-21 at 21.55.10.png>)
 
-Wir können wenn nötig auch die anzahl an benötigten **CPU's und RAM** erhöhen.
+Wir können wenn nötig auch die Anzahl an benötigten **CPU's und RAM** erhöhen.
 
 Als Name für unsere VM wählen wir 
 
 `vmpsateam10-01 bzw. vmpsateam10-02`
 
+Nun können wir auf "Finish" klicken und haben unsere VM erstellt.
+
+## Port Forwarding für SSH einrichten
+Damit wir uns in zukunft auf die VM einloggen können, müssen wir ein entsprechendes Portforwarding einrichten. 
+
+![Alt text](image-1.png)
+
+Als Gruppe 10 wurden uns folgende Ports zugewiesen: 61000 - 61099
+Als VM Nr. 2 verwende ich den Port **61002**, für VM Nr 1 verwenden wir den Port
+`61001`
+und forwarden unseren SSH Port 22 dort hin, in der folgenden Einstellung:
+
+![Alt text](image-2.png)
+
+## Partitionieren und Betriebssystem installieren
+Durch das Template wurde uns eine "virtuelle" .vdi Festplatte zugeteilt, die 7 GB groß ist und ganz von einer NTFS Partition besetzt wird, die in wirklichkeit weniger als 50MB Speicher benötigt. Also müssen wir vor der Installation, diese Partition verkleinern oder verschieben.
+
+Was wir aber zuerst machen werden, ist unsere Festplatte zu verößern, denn nach Ubuntu 22.04 LTS Systemanforderungen, benötigen wir mindestens 25GB freien Speicherplatz. Selbst wenn wir die bestehende partition so verkleinern, dass sie knapp 7 GB Speicher wieder hergibt, liegt sie trotzdem unter den benötigten 25 GB.
+
+![Alt text](image-4.png)
+
+Dazu öffnen wir den Virtual Media Manager von Virtualbox:
+
+![Alt text](image-5.png)
+
+Hier geben wir unter Size 32GB ein und klicken auf Apply:
+
+![Alt text](image-6.png)
+
+Was ist nun passiert? die alte ntfs partition bleibt und wir haben 25GB freien speicherplatz geschaffen, die wir für neue Partitionen benutzen können. Um die bestehendeWir müssen während dem Installationsprozess noch manuell eine "/" partition und eine "boot" partition erstellen, dazu kommen wir aber später.
+
+Da diese VM noch leer ist, müssen wir nun das Betriebssystem installieren. Dafür laden wir die .iso Datei des entsprechenden Betriebssystems runter. Beim Betriebssystem haben wir uns für Ubuntu 22.04 LTS Server entschieden, da dieses Betriebssystem ohne überflüssigen Services kommt, die wir später noch deinstallieren müssen. Auch wird die Server Edition oft für Serveranwendungen, ist lightweight und bietet langanhaltigen Support. Sie kommt deshalb aber leider auch ohne Grafischer User Interface (GUI), sodass wir nur mit der Command Line arbeiten können, was für solche Server aber eigentlich üblich ist.
+
+Um die Installationsimagedatei zu laden, gehen wir hier auf die Storage einstellungen und wählen
+
+`Choose a disk file...`
+
+![Alt text](image-3.png)
+
+Nun können wir den Server starten, indem wir unter diesen Auswählen, und neben dem Dropdown Menü des Grünen Pfeils, den `Detachable Start` auswählen.
+
+Jetzt öffnen wir die Shell um mit *parted* unsere nötigen Partitionen zu erstellen.
+
+Wir gehen also auf oben links auf *enter shell*
+![Alt text](image-8.png)
+hier geben wir nun folgendes ein:
+
+`parted`
+
+mit `print` sehen wir all unsere aktuellen partitionen.
+
+Wir erstellen nun eine "boot" partition und eine "/" partition mit 
+
+`mkpart primary fat32 7510 8.5G`
+
+`set 2 boot on`
+
+`set 2 esp on`
+
+`mkpart primary ext4 8.5G 33G`
+
+Wir kehren nun zurück zu unserer eigentlichen installation mit:
+
+`quit`
+
+`exit`
+
+### Betriebssystem Installieren
+Innerhalb unserer VM wählen wir nun folgende Optionen:
+(Eigentlich wählen wir hier überall die Default Optionen)
+1. Install Ubuntu Server
+2. Keyboard Layout/Variant English (US)
+3. Type of Install: Ubuntu Server 
+4. Network Connections: Einfach weiter, ohne was zu ändern
+5. Proxy Adress: Einfach weiter, ohne was zu ändern
+6. Ubuntu Archive Mirror: Einfach weiter, ohne was zu ändern
+7. Partitionierung: Custom Storage layout wählen
+   1. Partition 3 auswählen -> Edit -> Format: ext4 -> Save
+
+
+Es sollte so aussehen:
+
+![Alt text](image-9.png)
+
+Nun können wir auf Done und Continue klicken. Die bestehende NTFS partition wird dadurch nicht beschädigt, da wir die 2 neu erstellten Partitionen verwenden werden.
+
+Jetzt können wir unseren User einrichten
+`vmpsateam10-01 bzw. vmpsateam10-02`
+
+
 **ill finish this tmr evening**
+
