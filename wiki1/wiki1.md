@@ -223,3 +223,7 @@ Wir ändert die Datei so, dass nur der root Benutzer diese lesen und ändern kan
 
 Und voila, jetzt kann man sich mit einem private Key einloggen
 
+## Benutzerkennungen einrichten
+
+<!-- It is usually recommended to only use usernames that begin with a lower case letter or an underscore, followed by lower case letters,
+       digits, underscores, or dashes. They can end with a dollar sign. In regular expression terms: [a-z_][a-z0-9_-]*[$]? -->
