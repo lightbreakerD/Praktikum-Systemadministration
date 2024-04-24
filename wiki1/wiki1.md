@@ -63,10 +63,10 @@ und forwarden unseren SSH Port 22 dort hin, in der folgenden Einstellung:
 
 ![Alt text](image-2.png)
 
-## Partitionieren und Betriebssystem installieren
+## Partitionieren
 Durch das Template wurde uns eine "virtuelle" .vdi Festplatte zugeteilt, die 7 GB groß ist und ganz von einer NTFS Partition besetzt wird, die in wirklichkeit weniger als 50MB Speicher benötigt. Also müssen wir vor der Installation, diese Partition verkleinern oder verschieben.
 
-Was wir aber zuerst machen werden, ist unsere Festplatte zu verößern, denn nach Ubuntu 22.04 LTS Systemanforderungen, benötigen wir mindestens 25GB freien Speicherplatz. Selbst wenn wir die bestehende partition so verkleinern, dass sie knapp 7 GB Speicher wieder hergibt, liegt sie trotzdem unter den benötigten 25 GB.
+<!-- Was wir aber zuerst machen werden, ist unsere Festplatte zu verößern, denn nach Ubuntu 22.04 LTS Systemanforderungen, benötigen wir mindestens 25GB freien Speicherplatz. Selbst wenn wir die bestehende partition so verkleinern, dass sie knapp 7 GB Speicher wieder hergibt, liegt sie trotzdem unter den benötigten 25 GB.
 
 ![Alt text](image-4.png)
 
@@ -78,19 +78,9 @@ Hier geben wir unter Size 32GB ein und klicken auf Apply:
 
 ![Alt text](image-6.png)
 
-Was ist nun passiert? die alte ntfs partition bleibt und wir haben 25GB freien speicherplatz geschaffen, die wir für neue Partitionen benutzen können. Um die bestehendeWir müssen während dem Installationsprozess noch manuell eine "/" partition und eine "boot" partition erstellen, dazu kommen wir aber später.
+Was ist nun passiert? die alte ntfs partition bleibt und wir haben 25GB freien speicherplatz geschaffen, die wir für neue Partitionen benutzen können. Um die bestehendeWir müssen während dem Installationsprozess noch manuell eine "/" partition und eine "boot" partition erstellen, dazu kommen wir aber später. -->
 
-Da diese VM noch leer ist, müssen wir nun das Betriebssystem installieren. Dafür laden wir die .iso Datei des entsprechenden Betriebssystems runter. Beim Betriebssystem haben wir uns für Ubuntu 22.04 LTS Server entschieden, da dieses Betriebssystem ohne überflüssigen Services kommt, die wir später noch deinstallieren müssen. Auch wird die Server Edition oft für Serveranwendungen, ist lightweight und bietet langanhaltigen Support. Sie kommt deshalb aber leider auch ohne Grafischer User Interface (GUI), sodass wir nur mit der Command Line arbeiten können, was für solche Server aber eigentlich üblich ist.
-
-Um die Installationsimagedatei zu laden, gehen wir hier auf die Storage einstellungen und wählen
-
-`Choose a disk file...`
-
-![Alt text](image-3.png)
-
-Nun können wir den Server starten, indem wir unter diesen Auswählen, und neben dem Dropdown Menü des Grünen Pfeils, den `Detachable Start` auswählen.
-
-Jetzt öffnen wir die Shell um mit *parted* unsere nötigen Partitionen zu erstellen.
+<!-- Jetzt öffnen wir die Shell um mit *parted* unsere nötigen Partitionen zu erstellen.
 
 Wir gehen also auf oben links auf *enter shell*
 ![Alt text](image-8.png)
@@ -114,9 +104,34 @@ Wir kehren nun zurück zu unserer eigentlichen installation mit:
 
 `quit`
 
-`exit`
+`exit` -->
 
-### Betriebssystem Installieren
+Da wir auf unserer Festplatte bereits eine NTFS Partition besitzen, müssen wir die verkleinern, um Platz für unser neues Betriebssystem zu schaffen. Auf der Festplatte befintet sich eine Datei aus dem Jahre 2013, welche nicht beschädigt werden soll. Dazu können wir gparted verwenden, welches man hier erhalten kann.
+
+https://gparted.org/download.php
+
+Nun laden wir die Imagedatei und starten unseren Server und starten Gparted
+
+Wir müssen nun folgende Sachen machen:
+- ntfs partition auf 50 MB verkleinern
+- eine fat32 partition erstellen welche 512MB groß ist und die flags boot, esp hat
+- eine ext4 Partition, die den Rest des freien Speicherplatzes besetzt
+
+Nun müssen wir nur noch auf den grünen Pfeil klicken um die Änderungen anzuwenden. Es sollte nun so aussehen:
+
+![Alt text](image-10.png)
+
+## Betriebssystem Installieren
+Da diese VM noch leer ist, müssen wir nun das Betriebssystem installieren. Dafür laden wir die .iso Datei des entsprechenden Betriebssystems runter. Beim Betriebssystem haben wir uns für Ubuntu 22.04 LTS Server entschieden, da dieses Betriebssystem ohne überflüssigen Services kommt, die wir später noch deinstallieren müssen. Auch wird die Server Edition oft für Serveranwendungen, ist lightweight und bietet langanhaltigen Support. Sie kommt deshalb aber leider auch ohne Grafischer User Interface (GUI), sodass wir nur mit der Command Line arbeiten können, was für solche Server aber eigentlich üblich ist.
+
+Um die Installationsimagedatei zu laden, gehen wir hier auf die Storage einstellungen und wählen
+
+`Choose a disk file...`
+
+![Alt text](image-3.png)
+
+Nun können wir den Server starten, indem wir unter diesen Auswählen, und neben dem Dropdown Menü des Grünen Pfeils, den `Detachable Start` auswählen.
+
 Innerhalb unserer VM wählen wir nun folgende Optionen:
 (Eigentlich wählen wir hier überall die Default Optionen)
 1. Install Ubuntu Server
@@ -144,6 +159,14 @@ Servername entsprechend:
 - installieren OpenSSH server
 - Importieren keine SSH Identity
 - Keine Snaps installieren
+
+Jetzt können wir unsere VM neustarten und mit dem folgenden Befehl die ssh Verbindung zu unserer VM aufbauen:
+
+`ssh -p <portnummer> <benutzername>@psa.in.tum.de`
+
+wie beispielsweise:
+
+`ssh -p 61002 boyo@psa.in.tum.de`
 
 **ill finish this tmr evening**
 
