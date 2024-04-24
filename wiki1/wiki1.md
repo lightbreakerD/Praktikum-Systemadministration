@@ -2,7 +2,7 @@
 In dieser Aufgabe gilt es ein Unix-Betriebssystem zu installieren, das für den Rest des Praktikums als Basis für die Bearbeitung aller weiteren Aufgaben dienen soll.
 
 ## Einleitung
-Schreiben wir zuletzt
+Für diese Aufgabe erstellen wir eine VM auf der Host Machine, laden ein VW template, welches bereits eine Partition enthält, verkleinern diese und installieren Ubuntu Server auf den neugeschaffenen freien Speicher. Danach deaktivieren wir nicht benötigte Dienste und erstellen ein paar Benutzer.
 
 ## Verbindung mit dem Host Server
 Wir unterscheiden hier zwischen zwei Server, dem Praktikum Server oder der Host Server und die Virtual Machines (VM's). Auf dem Host Server laufen mehrere VM's, die den jeweiligen Praktikum teams gehören.
