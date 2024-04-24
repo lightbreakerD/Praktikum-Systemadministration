@@ -221,7 +221,7 @@ Wir ändert die Datei so, dass nur der root Benutzer diese lesen und ändern kan
 
 `chmod 600 ~/.ssh/authorized_keys`
 
-Und voila, jetzt kann man sich mit einem private Key einloggen
+Und voila, jetzt kann man sich mit dem entsprechenden private Key einloggen
 
 ## Benutzerkennungen einrichten
 
