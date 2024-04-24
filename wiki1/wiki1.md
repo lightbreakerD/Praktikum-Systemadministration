@@ -30,6 +30,12 @@ Nun können wir die Virtualbox Applikation starten, in unserem Terminal
 
 `VirtualBox`
 
+Ggf. kann man den vncserver prozess mit 
+
+`vncserver -kill :18`
+
+stoppen
+
 ## VM Erstellen mithilfe von dem vorgegebenen Template
 Hier gehen wir nun auf den Button "Import" und importieren das VM template für unser Praktikum:
 
@@ -168,5 +174,52 @@ wie beispielsweise:
 
 `ssh -p 61002 boyo@psa.in.tum.de`
 
-**ill finish this tmr evening**
+**Dienste**
+Da wir die Ubuntu Server Version verwendet haben, gibt es nicht mehr allzviele Services die mitgeliefert kommen, da nur das nötigste mitgeliefert wird. Viele Services sind zwar nicht unbedingt notwendig, wie z.B. Cron oder rsyslog usw., diese ermöglichen uns aber im Laufe des Praktikums mehr Möglichkeiten zum Debuggen oder Automatisieren, weshalb wir vorsichtshalber, bei Ungewissheit, Services aktiviert lassen.
+
+Wir können nun alle Services uns anzeigen lassen:
+
+`systemctl --type=service --state=running`
+
+![Alt text](image-11.png)
+
+| Service Name | Brauchen wir es? |
+|---|---|
+| cron.service | Benötigt für regelmäßige Hintergrundprozesse, auch cronjobs genannt, könnten wir später brauchen für Automatisierungen. |
+| dbus.service | Ja für die Kommunikation zwischen verschiedenen Prozessen. |
+| getty@tty1.service | Ja für die Terminal-Session-Verwaltung. |
+| irqbalance.service | Ja zur Optimierung der CPU-Auslastung. |
+| ModemManager.service | Nein wir verwenden kein Modem/Mobile Broadband. |
+| multipathd.service | Ja wenn mehrere Pfade zu nicht lokalen Speichergeräten vorhanden sind, es kann ja sein, dass wir in Zukunft mit Netzwerkspeichern arbeiten. |
+| networkd-dispatcher.service | Ja sicherheitshalber lassen wir den laufen, da er uns ermöglicht, Skripte auszuführen, wenn der Netzwerkstatus sich ändert. |
+| polkit.service | Ja ist ein Systemdienst für die Autorisierungsverwaltung. |
+| rsyslog.service | Ja für die Logs, damit wir Fehler besser beheben können. |
+| snapd.service | Ja, wenn Snap-Pakete verwendet werden, behalten wir, Letsencrypt bevorzugt beispielsweise die Installation durch mit snap. |
+| ssh.service | Ja für unser ssh. |
+| systemd-journald.service | Ja für die Protokollierung von systemd services, wird uns in Zukunft auch das Debuggen erleichtern. |
+| systemd-logind.service | Ja damit sich Benutzer anmelden können. |
+| systemd-networkd.service | Ja brauchen wir für die Netzwerkkonfiguration. |
+| systemd-resolved.service | Ja brauchen wir für die Netzwerknamensauflösung, z.B. hostname in IP. |
+| systemd-timesyncd.service | Ja damit unsere Systemzeit richtig synchronisiert ist. |
+| systemd-udevd.service | Ja für die Verwaltung von Geräteereignissen, z.B. wenn ein neues Gerät angeschlossen wird. |
+| udisks2.service | Ja für die Festplattenverwaltung, erkennt Festplatten und ermöglicht uns diese zu formatieren/partitionieren. |
+| unattended-upgrades.service | Ja für automatische Systemupdates, damit unser Ubuntu sicher und auf dem neusten Stand ist. |
+| user@1000.service | Ja für die Benutzerverwaltung, 1000 steht jetzt für meine aktuelle userid. |
+
+## SSH für root
+Root login mit einem Passwort ist auf Ubuntu Server generell gesperrt, wir können sollen aber ermöglichen, dass man sich mit einem SSH key einloggen kann, den entsprechenden public key haben wir erhalten.
+
+Nun müssen wir paar Befehle ausführen, wir loggen uns als root ein mit
+
+`sudo su`
+
+danach erstellen/fügen wir unseren public Key zu authorisierten Key's hinzu:
+
+`nano ~/.ssh/authorized_keys`
+
+Wir ändert die Datei so, dass nur der root Benutzer diese lesen und ändern kann
+
+`chmod 600 ~/.ssh/authorized_keys`
+
+Und voila, jetzt kann man sich mit einem private Key einloggen
 
